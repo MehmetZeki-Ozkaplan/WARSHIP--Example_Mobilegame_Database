@@ -1,0 +1,140 @@
+INSERT INTO PLAYERS(username, email, password, registrationDate, level, experiencePoints)
+VALUES 
+('SeaLion', 'SeaLion@hotmail.com', '1379', '2019-05-06', 5, 1500),
+('WarriorCaptain', 'WarriorCaptain@hotmail.com', '0258', '2020-10-18', 10, 3000),
+('OceanPirate', 'OceanPirate@hotmail.com', '7913', '2021-11-09', 3, 800),
+('StormWave', 'StormWave@outlook.com', '4862', '2019-10-25', 7, 2100),
+('SeaWolf', 'SeaWolf@outlook.com', '2684', '2021-03-18', 2, 500),
+('FireShip', 'FireShip@outlook.com', '03179', '2022-01-18', 6, 1800),
+('SeaWarrior', 'SeaWarrior@outlook.com', '84620', '2022-05-17', 4, 1200),
+('ShipHunter', 'ShipHunter@outlook.com', '7894', '2021-04-08', 8, 2400),
+('PirateKing', 'PirateKing@gmail.com', '0975', '2020-08-19', 9, 2700),
+('MediterraneanCommander', 'MediterraneanCommander@gmail.com', '3179', '2020-08-18', 1, 300),
+('CaptainStorm', 'CaptainStorm@gmail.com', '134679', '2018-07-16', 4, 1300),
+('SeaConqueror', 'SeaConqueror@gmail.com', '02597', '2021-05-12', 6, 1900),
+('GalleonStar', 'GalleonStar@gmail.com', '764920', '2021-03-26', 5, 1600),
+('SteelCaptain', 'SteelCaptain@gmail.com', '167943', '2020-10-13', 3, 1100),
+('SeaEagle', 'SeaEagle@gmail.com', '366842', '2023-01-15', 7, 2200),
+('PirateStar', 'PirateStar@outlook.com', '02580', '2021-07-26', 8, 2500),
+('OceanHunter', 'OceanHunter@hotmail.com', '794613', '2020-05-03', 2, 900),
+('WarriorSailor', 'WarriorSailor@hotmail.com', '46825', '2020-03-18', 1, 400),
+('BarbarossaPirate', 'BarbarossaPirate@hotmail.com', '73195', '2022-11-19', 9, 2800),
+('SeaSword', 'SeaSword@hotmail.com', '854631', '2019-09-21', 10, 3000);
+
+
+INSERT INTO ITEMS(itemName, itemType, itemValue, player_id)
+VALUES 
+('Cannon', 'Weapon', 100, 1),
+('Body Armor', 'Armor', 150, 1),
+('Repair Kit', 'Consumable', 50, 2),
+('Navigation Map', 'Tool', 120, 2),
+('Sail', 'Armor', 80, 3),
+('Treasure Chest', 'Resource', 200, 3),
+('Anchor', 'Tool', 60, 4),
+('Binoculars', 'Tool', 180, 4),
+('Medkit', 'Consumable', 30, 5),
+('Flag', 'Accessory', 250, 5),
+('Cannonballs', 'Ammunition', 90, 6),
+('Compass', 'Tool', 110, 7),
+('Harpoon', 'Weapon', 140, 8),
+('Lifeboat', 'Safety', 200, 9),
+('Telescope', 'Tool', 190, 10),
+('Gunpowder', 'Ammunition', 120, 11),
+('Rope', 'Tool', 150, 12),
+('Fishing Net', 'Tool', 60, 13),
+('Lantern', 'Accessory', 70, 14),
+('Ship Figurehead', 'Decoration', 300, 15);
+
+
+INSERT INTO SCORES(player_id, score, gameMode, scoreDate)
+VALUES
+(1, 200, 'War', '2020-08-11'),
+(1, 150, 'Exploration', '2021-04-22'),
+(2, 300, 'Survival', '2021-07-18'),
+(2, 250, 'War', '2019-08-17'),
+(3, 100, 'Exploration', '2023-04-05'),
+(3, 350, 'Survival', '2022-01-03'),
+(4, 400, 'War', '2023-09-27'),
+(4, 180, 'Exploration', '2022-06-28'),
+(5, 320, 'Survival', '2022-10-18'),
+(5, 270, 'War', '2022-12-12'),
+(6, 210, 'War', '2021-09-26'),
+(7, 230, 'Exploration', '2022-11-21'),
+(8, 280, 'Survival', '2023-06-28'),
+(9, 320, 'War', '2021-07-24'),
+(10, 400, 'Exploration', '2022-09-25'),
+(11, 350, 'Survival', '2021-07-20'),
+(12, 300, 'War', '2022-11-29'),
+(13, 250, 'Exploration', '2022-10-11'),
+(14, 270, 'Survival', '2022-08-13'),
+(15, 390, 'War', '2021-08-25');
+
+
+INSERT INTO QUEST(questName, description, reward, player_id, status)
+VALUES 
+('Sink the Pirate Ship', 'Destroy the pirate ship terrorizing the waters', '1000 Gold', 1, 'Completed'),
+('Rescue the Crew', 'Rescue the crew from the island', '500 Gold', 2, 'In Progress'),
+('Find the Hidden Treasure', 'Find and retrieve the hidden treasure', '2000 Gold', 3, 'Completed'),
+('Defend the Port', 'Protect the port from enemy attacks', '300 Gold', 4, 'In Progress'),
+('Escort the Trade Ship', 'Ensure the safe passage of the trade ship', '400 Gold', 5, 'Completed'),
+('Clear the Sea Route', 'Eliminate threats in the sea route', '800 Gold', 6, 'Completed'),
+('Retrieve the Lost Artifact', 'Recover the artifact lost at sea', '1500 Gold', 7, 'In Progress'),
+('Deliver the Message', 'Deliver the important message to the admiral', '100 Gold', 8, 'Completed'),
+('Collect Medicinal Herbs', 'Gather medicinal herbs from the island', '50 Gold', 9, 'Completed'),
+('Build a Raft', 'Build a raft to navigate the river', '200 Gold', 10, 'In Progress'),
+('Secure the Outpost', 'Protect the outpost from invaders', '700 Gold', 6, 'Completed'),
+('Explore the Coastline', 'Scout the coastline for enemy activity', '400 Gold', 7, 'In Progress'),
+('Capture the Flagship', 'Seize the enemy flagship', '1000 Gold', 8, 'Completed'),
+('Patrol the Waters', 'Patrol the waters for pirate activity', '500 Gold', 9, 'In Progress'),
+('Deliver the Cargo', 'Safely deliver the cargo to the destination', '300 Gold', 10, 'Completed'),
+('Repair the Ship', 'Fix the damage to your ship', '600 Gold', 11, 'Completed'),
+('Recruit Crew Members', 'Hire new crew members for your ship', '200 Gold', 12, 'In Progress'),
+('Map the Sea', 'Create a detailed map of the sea', '150 Gold', 13, 'Completed'),
+('Defeat the Kraken', 'Defeat the sea monster Kraken', '2500 Gold', 14, 'In Progress'),
+('Negotiate with Pirates', 'Negotiate a truce with the pirates', '1000 Gold', 15, 'Completed');
+
+
+INSERT INTO ACHIEVEMENTS(achievementName, description, achievementDate, player_id)
+VALUES 
+('First Victory', 'Win your first naval battle', '2020-08-11', 1),
+('Treasure Hunter', 'Find the hidden treasure', '2021-04-22', 2),
+('Master Navigator', 'Explore all regions', '2021-07-18', 3),
+('Sea Champion', 'Win the championship', '2019-08-17', 4),
+('Survivor', 'Survive 100 days at sea', '2023-04-05', 5),
+('Speed Sailor', 'Complete the race in record time', '2022-01-03', 6),
+('Strategist', 'Successfully execute a complex strategy', '2023-09-27',7),
+('Collector', 'Collect every type of item', '2022-06-28', 8),
+('Helper', 'Assist 10 other players', '2022-10-18', 9),
+('Puzzle Solver', 'Solve all puzzles on the map', '2022-12-12', 10),
+('Master Gunner', 'Accumulate 1000 hits with cannons', '2021-09-26', 6),
+('Ship Builder', 'Build a new ship', '2022-11-21', 7),
+('Fleet Commander', 'Command a fleet of 5 ships', '2023-06-28', 8),
+('Explorer', 'Visit every island', '2021-07-24', 9),
+('Defender', 'Successfully defend your port 10 times', '2022-09-25', 10),
+('Raider', 'Successfully raid enemy ports', '2021-07-20', 11),
+('Navigator', 'Sail through a storm', '2022-11-29', 12),
+('Bounty Hunter', 'Collect bounties on 50 ships', '2022-10-11', 13),
+('Rescuer', 'Rescue 100 crew members', '2022-08-13', 14),
+('Treasure Seeker', 'Find 50 treasures', '2021-08-25', 15);
+
+INSERT INTO FRIENDS(player_id, friend_id)
+VALUES 
+(1, 2),
+(1, 3),
+(2, 4),
+(2, 5),
+(3, 6),
+(3, 7),
+(4, 8),
+(4, 9),
+(6, 1),
+(1, 6),
+(2, 7),
+(3, 8),
+(5, 10),
+(6, 11),
+(7, 12),
+(8, 13),
+(9, 14),
+(10, 15);
+
