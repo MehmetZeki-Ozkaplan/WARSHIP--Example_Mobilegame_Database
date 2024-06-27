@@ -1,0 +1,363 @@
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+USE WARSHIP
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+--SORGU 1 : List all items owned by a particular player alphabetically
+
+SELECT i.itemName
+FROM ITEMS i
+JOIN PLAYERS p ON i.player_id = p.player_id
+WHERE p.player_id = 1
+ORDER BY i.itemName ASC;
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+--SORGU 2; List all the tasks that a particular player has completed and the status of the missions
+
+SELECT q.questName, q.Statuss
+FROM QUEST q
+JOIN PLAYERS p ON q.player_id = p.player_id
+WHERE p.player_id = 10;
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SORGU 3;  Write the SQL code that allows the user to collect new items
+INSERT INTO ITEMS(itemName, itemType, itemValue, player_id)
+VALUES ('Gold Gun', 'Decoration', 1000, 15);
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SORGU 4: Write the SQL code that lists all the scores of that user according to the given user code
+SELECT player_id, score, gameMode, scoreData
+FROM SCORES
+WHERE player_id = 3
+ORDER BY scoreData ASC;
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+-- SORGU 5: Write the SQL code that shows the player with the highest score and the tasks that player has completed the most
+SELECT TOP 1 p.player_id, p.userName, MAX(s.score) AS Maxscore, q.questName
+FROM PLAYERS p
+JOIN SCORES s ON p.player_id = s.player_id
+JOIN QUEST q ON p.player_id = q.player_id
+WHERE q.Statuss = 'Tamamlandı'
+GROUP BY p.player_id, p.userName, q.questName
+ORDER BY Maxscore DESC, q.questName ASC;
+
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+-- SORGU 6: Write the SQL code that shows the player who has completed at least 5 missions with more than 100 scores as a popular player
+
+SELECT p.player_id, p.userName, COUNT(DISTINCT q.questName) AS CompletedQuests, MAX(s.score) AS Maxscore
+FROM PLAYERS p
+JOIN SCORES s ON p.player_id = s.player_id
+JOIN QUEST q ON p.player_id = q.player_id
+GROUP BY p.player_id, p.userName
+HAVING COUNT(DISTINCT q.questName) >= 5 AND MAX(s.score) > 100
+ORDER BY COUNT(DISTINCT q.questName) DESC, MAX(s.score) DESC;
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SORGU 7: Write the SQL code that lists the information of the top 5 players with the most scores and completed tasks, as well as the score and task counts
+
+SELECT TOP 5
+p.player_id,
+p.userNAme,
+SUM(s.score) AS TotalScore,
+COUNT(q.questName) AS CompletedQuests
+FROM PLAYERS p
+LEFT JOIN SCORES s ON p.player_id = s.player_id
+LEFT JOIN QUEST q ON p.player_id = q.player_id AND q.Statuss = 'Completed'
+GROUP BY p.player_id, p.userName
+ORDER BY TotalScore DESC, CompletedQuests DESC;
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SORGU 8: Write the SQL code that lists the friends of the player who added the most friends
+
+SELECT f.player_id, p.userName
+FROM FRIENDS f
+JOIN PLAYERS p ON f.friend_id = p.player_id
+WHERE f.player_id = 
+(
+    SELECT TOP 1 player_id
+    FROM FRIENDS
+    GROUP BY player_id
+    ORDER BY COUNT(*) DESC
+)
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SORGU 9: Create a stored procedure that performs the process of adding a new item. This stored procedure retrieves item information from the user and adds a new record to the Items table
+
+CREATE PROCEDURE AddNewItems
+    @itemName NVARCHAR(255),	
+    @itemType NVARCHAR(255),		
+    @itemValue INT,				
+    @player_id INT				
+AS
+BEGIN
+    INSERT INTO ITEMS(itemName, itemType, itemValue, player_id)
+    VALUES (@itemName, @itemType, @itemValue, @player_id);
+END;
+
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SORGU 10: Create a stored procedure that allows the user to complete the task. Make sure that the player's level and experience points are updated during mission completion
+
+CREATE PROCEDURE CompleteQuests
+    @player_id INT,
+    @quest_id INT
+AS
+BEGIN
+    DECLARE @rewardXp INT;		
+    DECLARE @rewardLevel INT;	
+
+    UPDATE QUEST
+    SET Statuss = 'Tamamlandı'
+    WHERE player_id = @player_id AND quest_id = @quest_id;
+
+    
+    SELECT @rewardXp = reward
+    FROM QUEST
+    WHERE quest_id = @quest_id;
+
+    
+    DECLARE @currentXp INT;
+    DECLARE @currentLevel INT;
+    SELECT @currentXp = experiencePoints, @currentLevel = levell
+    FROM PLAYERS
+    WHERE player_id = @player_id;
+
+    
+    SET @currentXp = @currentXp + @rewardXp;
+    SET @rewardLevel = FLOOR(@currentXp / 500) + 1;
+
+    
+    UPDATE PLAYERS
+    SET levell = @rewardLevel,
+        experiencePoints = @currentXp
+    WHERE player_id = @player_id;
+
+END;
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SORGU 11: Create a trigger that will automatically update the relevant tables when adding a new task or achievements
+
+CREATE TRIGGER UpdatePlayerExperiences
+ON QUEST		
+AFTER INSERT
+AS
+BEGIN
+    DECLARE @player_id INT;		
+    DECLARE @rewardXp INT;		
+    DECLARE @currentXp INT;		
+    DECLARE @rewardLevel INT;	
+    DECLARE @currentLevel INT;	
+
+
+    SELECT @player_id = inserted.player_id,
+           @rewardXp = inserted.reward
+    FROM inserted;
+
+    
+    SELECT @currentXp = experiencePoints, @currentLevel = levell
+    FROM PLAYERS
+    WHERE player_id = @player_id;
+
+    
+    SET @currentXp = @currentXp + @rewardXp;
+    SET @rewardLevel = FLOOR(@currentXp / 500) + 1;
+
+    
+    UPDATE PLAYERS
+    SET levell = @rewardLevel,
+        experiencePoints = @currentXp
+    WHERE player_id = @player_id;
+END;
+
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SORGU 12 : Create a trigger that will automatically update the relevant tables when you delete a user's score
+
+
+CREATE TRIGGER UpdatePlayerExperienceOnScoreDeletes
+ON SCORES		
+AFTER DELETE
+AS
+BEGIN
+    DECLARE @player_id INT;			
+    DECLARE @deletedScore INT;		
+    DECLARE @currentXp INT;			
+    DECLARE @currentLevel INT;		
+
+    SELECT @player_id = deleted.player_id,
+           @deletedScore = deleted.score
+    FROM deleted;
+
+    
+    SELECT @currentXp = experiencePoints, @currentLevel = levell
+    FROM PLAYERS
+    WHERE player_id = @player_id;
+
+    
+    SET @currentXp = @currentXp - @deletedScore;
+
+    IF @currentXp < 0
+    BEGIN
+        SET @currentXp = 0;
+    END
+
+    SET @currentLevel = FLOOR(@currentXp / 500) + 1;
+
+    UPDATE PLAYERS
+    SET levell = @currentLevel,
+        experiencePoints = @currentXp
+    WHERE player_id = @player_id;
+END;
+
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SORGU 13: Write the SQL code that allows users to like their achievements and add them to favorites. Users can add their favorite achievements to favorites and access them later.
+
+CREATE TABLE ACHIEVEMENT_ACTIONS
+(
+    action_id INT IDENTITY(1,1) PRIMARY KEY,
+    player_id INT,
+    achievement_id INT,
+    action_type VARCHAR(20) -- 'LIKE' or 'FAVORITE'
+);
+
+INSERT INTO ACHIEVEMENT_ACTIONS (player_id, achievement_id, action_type) VALUES (1, 1, 'LIKE');
+
+INSERT INTO ACHIEVEMENT_ACTIONS (player_id, achievement_id, action_type) VALUES (1, 1, 'FAVORITE');
+
+SELECT A.*
+FROM ACHIEVEMENT_ACTIONS AA
+JOIN ACHIEVEMENTS A ON AA.achievement_id = A.achievement_id
+WHERE AA.player_id = 1 AND AA.action_type = 'FAVORITE';
+
+SELECT A.*
+FROM ACHIEVEMENT_ACTIONS AA
+JOIN ACHIEVEMENTS A ON AA.achievement_id = A.achievement_id
+WHERE AA.player_id = 1 AND AA.action_type = 'LIKE';
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+-- SORGU 14:  Write the SQL code that defines VIP membership for 1 month to the user who completes the task and achieves the highest score
+
+
+SELECT player_id, MAX(score) AS max_score
+FROM SCORES
+GROUP BY player_id;
+
+IF OBJECT_ID('VIP_MEMBERS', 'U') IS NULL
+BEGIN
+    CREATE TABLE VIP_MEMBERS (
+        user_id INT PRIMARY KEY,
+        start_date DATE,
+        end_date DATE
+    );
+END;
+
+INSERT INTO VIP_MEMBERS (user_id, start_date, end_date)
+SELECT
+    S.player_id,
+    GETDATE() AS start_date,
+    DATEADD(month, 1, GETDATE()) AS end_date
+FROM
+    (SELECT player_id, MAX(score) AS max_score
+     FROM SCORES
+     GROUP BY player_id) AS S
+JOIN
+    (SELECT DISTINCT player_id
+     FROM QUEST
+     WHERE Statuss = 'Tamamlandı') AS Q
+ON S.player_id = Q.player_id;
+
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+-- SORGU 15: When an attempt is made to delete user information, write the trigger code that indicates when this operation was attempted
+
+CREATE TRIGGER trg_UserDeleteAttempt     
+ON PLAYERS								 
+INSTEAD OF DELETE						 
+AS
+BEGIN
+	
+    DECLARE @DeleteDate DATETIME;
+    SET @DeleteDate = GETDATE();
+
+	
+    INSERT INTO DeletedUserAttempts (user_id, delete_date)
+    SELECT player_id, @DeleteDate
+    FROM deleted;
+END;
+
+
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
