@@ -1,0 +1,59 @@
+CREATE TABLE PLAYERS
+(
+	player_id INT IDENTITY(1,1) PRIMARY KEY,
+	username VARCHAR(50) NOT NULL,
+	email VARCHAR(50) NOT NULL,
+	pasword VARCHAR(50) NOT NULL,
+	registrationDate DATE NOT NULL,
+	levell INT DEFAULT 1,
+	experiencePoints INT DEFAULT 0
+)
+
+CREATE TABLE ITEMS
+(
+	item_id INT IDENTITY(1,1) PRIMARY KEY,
+	itemName VARCHAR(100) NOT NULL,
+	itemType VARCHAR(50),
+	itemValue INT,
+	player_id INT,
+	FOREIGN KEY (player_id) REFERENCES PLAYERS(player_id)
+)
+
+CREATE TABLE SCORES
+(
+	score_id INT IDENTITY(1,1) PRIMARY KEY,
+	player_id INT,
+	score INT,
+	gameMode VARCHAR(50),
+	scoreData DATE,
+	FOREIGN KEY(player_id) REFERENCES PLAYERS(player_id)
+)
+
+CREATE TABLE QUEST
+(
+	quest_id INT IDENTITY(1,1)PRIMARY KEY,
+	questName VARCHAR(100) NOT NULL,
+	desscription TEXT,
+	reward VARCHAR(100),
+	player_id INT,
+	Statuss VARCHAR(50),
+	FOREIGN KEY(player_id) REFERENCES PLAYERS(player_id)
+)
+
+
+CREATE TABLE ACHIEVEMENTS
+(
+	achievement_id INT IDENTITY(1,1) PRIMARY KEY,
+	achievementName VARCHAR(100) NOT NULL,
+	desscription TEXT,
+	achievementDate DATE,
+	player_id INT,
+	FOREIGN KEY(player_id) REFERENCES PLAYERS(player_id)
+)
+
+CREATE TABLE FRIENDS
+(
+	player_id INT,
+	friend_id INT,
+	PRIMARY KEY(player_id,friend_id)
+)
