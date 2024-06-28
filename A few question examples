@@ -2,7 +2,7 @@
 USE WARSHIP
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
---SORGU 1 : List all items owned by a particular player alphabetically
+-- QUERY 1 : List all items owned by a particular player alphabetically
 
 SELECT i.itemName
 FROM ITEMS i
@@ -14,7 +14,7 @@ ORDER BY i.itemName ASC;
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
---SORGU 2; List all the tasks that a particular player has completed and the status of the missions
+--QUERY 2; List all the tasks that a particular player has completed and the status of the missions
 
 SELECT q.questName, q.Statuss
 FROM QUEST q
@@ -27,7 +27,7 @@ WHERE p.player_id = 10;
 
 
 
--- SORGU 3;  Write the SQL code that allows the user to collect new items
+-- QUERY 3;  Write the SQL code that allows the user to collect new items
 INSERT INTO ITEMS(itemName, itemType, itemValue, player_id)
 VALUES ('Gold Gun', 'Decoration', 1000, 15);
 
@@ -35,7 +35,7 @@ VALUES ('Gold Gun', 'Decoration', 1000, 15);
 
 
 
--- SORGU 4: Write the SQL code that lists all the scores of that user according to the given user code
+-- QUERY 4: Write the SQL code that lists all the scores of that user according to the given user code
 SELECT player_id, score, gameMode, scoreData
 FROM SCORES
 WHERE player_id = 3
@@ -48,7 +48,7 @@ ORDER BY scoreData ASC;
 
 
 
--- SORGU 5: Write the SQL code that shows the player with the highest score and the tasks that player has completed the most
+-- QUERY 5: Write the SQL code that shows the player with the highest score and the tasks that player has completed the most
 SELECT TOP 1 p.player_id, p.userName, MAX(s.score) AS Maxscore, q.questName
 FROM PLAYERS p
 JOIN SCORES s ON p.player_id = s.player_id
@@ -65,7 +65,7 @@ ORDER BY Maxscore DESC, q.questName ASC;
 
 
 
--- SORGU 6: Write the SQL code that shows the player who has completed at least 5 missions with more than 100 scores as a popular player
+-- QUERY 6: Write the SQL code that shows the player who has completed at least 5 missions with more than 100 scores as a popular player
 
 SELECT p.player_id, p.userName, COUNT(DISTINCT q.questName) AS CompletedQuests, MAX(s.score) AS Maxscore
 FROM PLAYERS p
@@ -81,7 +81,7 @@ ORDER BY COUNT(DISTINCT q.questName) DESC, MAX(s.score) DESC;
 
 
 
--- SORGU 7: Write the SQL code that lists the information of the top 5 players with the most scores and completed tasks, as well as the score and task counts
+-- QUERY 7: Write the SQL code that lists the information of the top 5 players with the most scores and completed tasks, as well as the score and task counts
 
 SELECT TOP 5
 p.player_id,
@@ -99,7 +99,7 @@ ORDER BY TotalScore DESC, CompletedQuests DESC;
 
 
 
--- SORGU 8: Write the SQL code that lists the friends of the player who added the most friends
+-- QUERY 8: Write the SQL code that lists the friends of the player who added the most friends
 
 SELECT f.player_id, p.userName
 FROM FRIENDS f
@@ -118,7 +118,7 @@ WHERE f.player_id =
 
 
 
--- SORGU 9: Create a stored procedure that performs the process of adding a new item. This stored procedure retrieves item information from the user and adds a new record to the Items table
+-- QUERY 9: Create a stored procedure that performs the process of adding a new item. This stored procedure retrieves item information from the user and adds a new record to the Items table
 
 CREATE PROCEDURE AddNewItems
     @itemName NVARCHAR(255),	
@@ -138,7 +138,7 @@ END;
 
 
 
--- SORGU 10: Create a stored procedure that allows the user to complete the task. Make sure that the player's level and experience points are updated during mission completion
+-- QUERY 10: Create a stored procedure that allows the user to complete the task. Make sure that the player's level and experience points are updated during mission completion
 
 CREATE PROCEDURE CompleteQuests
     @player_id INT,
@@ -181,7 +181,7 @@ END;
 
 
 
--- SORGU 11: Create a trigger that will automatically update the relevant tables when adding a new task or achievements
+-- QUERY 11: Create a trigger that will automatically update the relevant tables when adding a new task or achievements
 
 CREATE TRIGGER UpdatePlayerExperiences
 ON QUEST		
@@ -222,7 +222,7 @@ END;
 
 
 
--- SORGU 12 : Create a trigger that will automatically update the relevant tables when you delete a user's score
+-- QUERY 12 : Create a trigger that will automatically update the relevant tables when you delete a user's score
 
 
 CREATE TRIGGER UpdatePlayerExperienceOnScoreDeletes
@@ -267,7 +267,7 @@ END;
 
 
 
--- SORGU 13: Write the SQL code that allows users to like their achievements and add them to favorites. Users can add their favorite achievements to favorites and access them later.
+-- QUERY 13: Write the SQL code that allows users to like their achievements and add them to favorites. Users can add their favorite achievements to favorites and access them later.
 
 CREATE TABLE ACHIEVEMENT_ACTIONS
 (
@@ -298,7 +298,7 @@ WHERE AA.player_id = 1 AND AA.action_type = 'LIKE';
 
 
 
--- SORGU 14:  Write the SQL code that defines VIP membership for 1 month to the user who completes the task and achieves the highest score
+-- QUERY 14:  Write the SQL code that defines VIP membership for 1 month to the user who completes the task and achieves the highest score
 
 
 SELECT player_id, MAX(score) AS max_score
@@ -336,7 +336,7 @@ ON S.player_id = Q.player_id;
 
 
 
--- SORGU 15: When an attempt is made to delete user information, write the trigger code that indicates when this operation was attempted
+-- QUERY 15: When an attempt is made to delete user information, write the trigger code that indicates when this operation was attempted
 
 CREATE TRIGGER trg_UserDeleteAttempt     
 ON PLAYERS								 
