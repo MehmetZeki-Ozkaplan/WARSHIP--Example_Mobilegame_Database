@@ -28,18 +28,24 @@ WHERE p.player_id = 10;
 
 
 -- QUERY 3;  Write the SQL code that allows the user to collect new items
+
 INSERT INTO ITEMS(itemName, itemType, itemValue, player_id)
 VALUES ('Gold Gun', 'Decoration', 1000, 15);
+
+
+
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 
 -- QUERY 4: Write the SQL code that lists all the scores of that user according to the given user code
+
 SELECT player_id, score, gameMode, scoreData
 FROM SCORES
 WHERE player_id = 3
 ORDER BY scoreData ASC;
+
 
 
 
@@ -49,6 +55,7 @@ ORDER BY scoreData ASC;
 
 
 -- QUERY 5: Write the SQL code that shows the player with the highest score and the tasks that player has completed the most
+
 SELECT TOP 1 p.player_id, p.userName, MAX(s.score) AS Maxscore, q.questName
 FROM PLAYERS p
 JOIN SCORES s ON p.player_id = s.player_id
@@ -77,6 +84,7 @@ ORDER BY COUNT(DISTINCT q.questName) DESC, MAX(s.score) DESC;
 
 
 
+
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
@@ -93,6 +101,7 @@ LEFT JOIN SCORES s ON p.player_id = s.player_id
 LEFT JOIN QUEST q ON p.player_id = q.player_id AND q.Statuss = 'Completed'
 GROUP BY p.player_id, p.userName
 ORDER BY TotalScore DESC, CompletedQuests DESC;
+
 
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
